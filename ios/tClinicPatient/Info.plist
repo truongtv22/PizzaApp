@@ -49,6 +49,14 @@
         </dict>
       </dict>
     </dict>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>Cho phép $(PRODUCT_NAME) sử dụng bluetooth để kết nối thiết bị bluetooth</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Cho phép $(PRODUCT_NAME) sử dụng camera để thêm ảnh</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Cho phép $(PRODUCT_NAME) sử dụng micrô trong các cuộc họp</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Cho phép $(PRODUCT_NAME) truy cập thư viện để thêm ảnh</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

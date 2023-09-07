@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/images/splash-logo-all.png",
       "resizeMode": "contain",
-      "backgroundColor": "#191015"
+      "backgroundColor": "#23376D"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -30,7 +30,7 @@
       "splash": {
         "image": "./assets/images/splash-logo-android-universal.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#23376D"
       }
     },
     "ios": {
@@ -41,7 +41,13 @@
         "image": "./assets/images/splash-logo-ios-mobile.png",
         "tabletImage": "./assets/images/splash-logo-ios-tablet.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#23376D"
+      },
+      "infoPlist": {
+        "NSBluetoothPeripheralUsageDescription": "Cho phép $(PRODUCT_NAME) sử dụng bluetooth để kết nối thiết bị bluetooth",
+        "NSCameraUsageDescription": "Cho phép $(PRODUCT_NAME) sử dụng camera để thêm ảnh",
+        "NSMicrophoneUsageDescription": "Cho phép $(PRODUCT_NAME) sử dụng micrô trong các cuộc họp",
+        "NSPhotoLibraryUsageDescription": "Cho phép $(PRODUCT_NAME) truy cập thư viện để thêm ảnh"
       }
     },
     "web": {
@@ -49,7 +55,7 @@
       "splash": {
         "image": "./assets/images/splash-logo-web.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#23376D"
       },
       "bundler": "metro"
     },
