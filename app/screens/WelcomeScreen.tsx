@@ -42,7 +42,8 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
             )
             await ZoomUs.joinMeeting({
               userName: "Johny",
-              meetingNumber: "81424603176",
+              meetingNumber: "84276841131",
+              password: "gP6bKG",
             })
           }}
         >
