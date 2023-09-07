@@ -1,9 +1,8 @@
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
 import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import {
-  Text,
-} from "app/components"
+import ZoomUs from "react-native-zoom-us"
+import { Text, Button } from "app/components"
 import { isRTL } from "../i18n"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
@@ -14,9 +13,7 @@ const welcomeFace = require("../../assets/images/welcome-face.png")
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
-export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen(
-) {
-
+export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
   const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
 
   return (
@@ -34,6 +31,23 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
       </View>
 
       <View style={[$bottomContainer, $bottomContainerInsets]}>
+        <Button
+          onPress={async () => {
+            await ZoomUs.initialize(
+              {
+                clientKey: "daqWx2FxjKOA2qzizkoHusmiDYo698oLbBXB",
+                clientSecret: "u9Wkt3H3wRAp5yIK4WQUrAu5ATjXJ1Pm9jZv",
+              },
+              { language: "vi" },
+            )
+            await ZoomUs.joinMeeting({
+              userName: "Johny",
+              meetingNumber: "81424603176",
+            })
+          }}
+        >
+          Join meeting
+        </Button>
         <Text tx="welcomeScreen.postscript" size="md" />
       </View>
     </View>
