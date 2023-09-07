@@ -1,4 +1,4 @@
-package com.pizzaapp;
+package vn.thinklabs.tclinicpatient;
 
 import android.os.Build;
 import android.os.Bundle;

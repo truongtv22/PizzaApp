@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.pizzaapp'
+    namespace 'vn.thinklabs.tclinicpatient'
     defaultConfig {
-        applicationId 'com.pizzaapp'
+        applicationId 'vn.thinklabs.tclinicpatient'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

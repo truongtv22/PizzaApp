@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>PizzaApp</string>
+    <string>tClinic Patient</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -27,8 +27,8 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>pizzaapp</string>
-          <string>com.pizzaapp</string>
+          <string>tclinicpatient</string>
+          <string>vn.thinklabs.tclinicpatient</string>
         </array>
       </dict>
     </array>
