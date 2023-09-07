@@ -58,15 +58,11 @@ function ImportantNotifyItem({ title }) {
   )
 }
 
-function ImportantNotify(props) {
-  const ImportantNotifyList = withHorizontalList(
-    ImportantNotifyItem,
-    DATA,
-    "Thông báo quan trọng",
-  )
-  return <ImportantNotifyList />
+const ImportantNotifyList = withHorizontalList(ImportantNotifyItem)
+
+export default function ImportantNotify(props) {
+  return <ImportantNotifyList title="Thông báo quan trọng" data={DATA} />
 }
-export default ImportantNotify
 
 const DATA = [
   {

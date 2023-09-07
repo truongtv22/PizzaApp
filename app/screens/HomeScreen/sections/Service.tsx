@@ -54,11 +54,11 @@ function ServiceItem({ title, description }) {
   )
 }
 
-function Service(props) {
-  const ServiceList = withList(ServiceItem, DATA, "Dịch vụ mới")
-  return <ServiceList />
+const ServiceList = withList(ServiceItem)
+
+export default function Service() {
+  return <ServiceList title="Dịch vụ mới" data={DATA} />
 }
-export default Service
 
 const DATA = [
   { id: 0, title: "Cổng chăm sóc khách hàng 24/07", description: "Nhanh - Tiện - Dễ dàng" },

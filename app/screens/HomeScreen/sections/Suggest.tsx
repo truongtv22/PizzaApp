@@ -62,11 +62,11 @@ function SuggestItem({ title }) {
   )
 }
 
-function Suggest(props) {
-  const SuggestList = withHorizontalList(SuggestItem, DATA, "Gợi ý cho bạn")
-  return <SuggestList />
+const SuggestList = withHorizontalList(SuggestItem)
+
+export default function Suggest() {
+  return <SuggestList title="Gợi ý cho bạn" data={DATA} />
 }
-export default Suggest
 
 const DATA = [
   { id: 0, title: "Đón bé bình an - Vượt cạn nhẹ nhàng" },

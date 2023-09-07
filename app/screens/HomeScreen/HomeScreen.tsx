@@ -40,9 +40,9 @@ export const HomeScreen: FC<HomeScreenProps> = observer(function HomeScreen() {
           <MainHeader />
           <Banner />
           <MainMenu />
-          {/* <Service />
+          <Service />
           <Suggest />
-          <ImportantNotify /> */}
+          <ImportantNotify />
           <NewsCategory />
           <News />
         </Column>
