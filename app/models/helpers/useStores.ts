@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { RootStore, RootStoreModel } from "../RootStore"
 import { setupRootStore } from "./setupRootStore"
+import { api } from "app/services/api"
 
 /**
  * Create the initial (empty) global RootStore instance here.
@@ -66,6 +67,8 @@ export const useInitialRootStore = (callback: () => void | Promise<void>) => {
 
       // let the app know we've finished rehydrating
       setRehydrated(true)
+
+      api.setupInterceptor(rootStore)
 
       // invoke the callback, if provided
       if (callback) callback()

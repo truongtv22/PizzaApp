@@ -1,84 +1,60 @@
 import React, { ErrorInfo } from "react"
-import { ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import { Button, Icon, Screen, Text } from "../../components"
-import { colors, spacing } from "../../theme"
+import { tw } from "react-native-tailwindcss"
+import { SafeAreaView, ScrollView, TextStyle, View, ViewStyle } from "react-native"
+import { Text, Button } from "@ui-kitten/components"
+import { Column } from "app/components/Stack"
+import { translate } from "app/i18n"
 
 export interface ErrorDetailsProps {
   error: Error
-  errorInfo: ErrorInfo | null
+  errorInfo: ErrorInfo
   onReset(): void
 }
 
 export function ErrorDetails(props: ErrorDetailsProps) {
   return (
-    <Screen
-      preset="fixed"
-      safeAreaEdges={["top", "bottom"]}
-      contentContainerStyle={$contentContainer}
-    >
-      <View style={$topSection}>
-        <Icon icon="ladybug" size={64} />
-        <Text style={$heading} preset="subheading" tx="errorScreen.title" />
-        <Text tx="errorScreen.friendlySubtitle" />
-      </View>
-
-      <ScrollView style={$errorSection} contentContainerStyle={$errorSectionContentContainer}>
-        <Text style={$errorContent} weight="bold" text={`${props.error}`.trim()} />
-        <Text
-          selectable
-          style={$errorBacktrace}
-          text={`${props.errorInfo?.componentStack ?? ""}`.trim()}
-        />
-      </ScrollView>
-
-      <Button
-        preset="reversed"
-        style={$resetButton}
-        onPress={props.onReset}
-        tx="errorScreen.reset"
-      />
-    </Screen>
+    <SafeAreaView style={tw.flex1}>
+      <Column space={4} style={[tw.flex1, tw.p4, tw.itemsCenter]}>
+        <Column space={2} style={tw.itemsCenter}>
+          <Text category="h5" style={$heading}>
+            {translate("errorScreen.title")}
+          </Text>
+          <Text>{translate("errorScreen.friendlySubtitle")}</Text>
+        </Column>
+        <ScrollView style={$errorSection} contentContainerStyle={tw.p4}>
+          <Text category="s1" style={$errorContent}>
+            {`${props.error}`.trim()}
+          </Text>
+          <Text selectable style={$errorBacktrace}>
+            {`${props.errorInfo.componentStack}`.trim()}
+          </Text>
+        </ScrollView>
+        <Button style={$resetButton} onPress={props.onReset}>
+          {translate("errorScreen.reset")}
+        </Button>
+      </Column>
+    </SafeAreaView>
   )
 }
 
-const $contentContainer: ViewStyle = {
-  alignItems: "center",
-  paddingHorizontal: spacing.lg,
-  paddingTop: spacing.xl,
-  flex: 1,
-}
-
-const $topSection: ViewStyle = {
-  flex: 1,
-  alignItems: "center",
-}
-
 const $heading: TextStyle = {
-  color: colors.error,
-  marginBottom: spacing.md,
+  color: "#C03403",
 }
 
 const $errorSection: ViewStyle = {
-  flex: 2,
-  backgroundColor: colors.separator,
-  marginVertical: spacing.md,
   borderRadius: 6,
-}
-
-const $errorSectionContentContainer: ViewStyle = {
-  padding: spacing.md,
+  backgroundColor: "#D7CEC9",
 }
 
 const $errorContent: TextStyle = {
-  color: colors.error,
+  color: "#C03403",
 }
 
 const $errorBacktrace: TextStyle = {
-  marginTop: spacing.md,
-  color: colors.textDim,
+  color: "#564E4A",
 }
 
 const $resetButton: ViewStyle = {
-  backgroundColor: colors.error,
-  paddingHorizontal: spacing.xxl,
+  borderWidth: 0,
+  backgroundColor: "#C03403",
 }

@@ -10,6 +10,7 @@
  * @refresh reset
  */
 import { applySnapshot, IDisposer, onSnapshot } from "mobx-state-tree"
+import pick from "lodash/pick"
 import { RootStore, RootStoreSnapshot } from "../RootStore"
 import * as storage from "../../utils/storage"
 
@@ -40,7 +41,19 @@ export async function setupRootStore(rootStore: RootStore) {
   if (_disposer) _disposer()
 
   // track changes & save to AsyncStorage
-  _disposer = onSnapshot(rootStore, (snapshot) => storage.save(ROOT_STATE_STORAGE_KEY, snapshot))
+  _disposer = onSnapshot(rootStore, (snapshot) => {
+    const persisted = {}
+    for (const key in rootStore) {
+      if (rootStore[key] && rootStore[key].persist) {
+        if (typeof rootStore[key].persist !== "boolean") {
+          persisted[key] = pick(snapshot[key], rootStore[key].persist)
+        } else {
+          persisted[key] = snapshot[key]
+        }
+      }
+    }
+    storage.save(ROOT_STATE_STORAGE_KEY, persisted)
+  })
 
   const unsubscribe = () => {
     _disposer?.()

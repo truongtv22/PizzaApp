@@ -1,0 +1,18 @@
+diff --git a/node_modules/react-refresh/cjs/react-refresh-runtime.development.js b/node_modules/react-refresh/cjs/react-refresh-runtime.development.js
+index a6a1184..7153ce2 100644
+--- a/node_modules/react-refresh/cjs/react-refresh-runtime.development.js
++++ b/node_modules/react-refresh/cjs/react-refresh-runtime.development.js
+@@ -133,8 +133,12 @@ function isReactClass(type) {
+   return type.prototype && type.prototype.isReactComponent;
+ }
+ 
++function isMobxObserver(type) {
++  return typeof type === "function" && type.name === "observerComponent"
++}
++
+ function canPreserveStateBetween(prevType, nextType) {
+-  if (isReactClass(prevType) || isReactClass(nextType)) {
++  if (isReactClass(prevType) || isReactClass(nextType) || isMobxObserver(nextType)) {
+     return false;
+   }
+ 

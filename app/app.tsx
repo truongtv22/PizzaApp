@@ -18,18 +18,41 @@ if (__DEV__) {
 }
 import "./i18n"
 import "./utils/ignoreWarnings"
-import { useFonts } from "expo-font"
 import React from "react"
+import moment from "moment"
+import { useFonts } from "expo-font"
+import { StatusBar } from "expo-status-bar"
+import "moment/locale/vi"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import * as Linking from "expo-linking"
+import { tw } from "react-native-tailwindcss"
+import { EvaIconsPack } from "@ui-kitten/eva-icons"
+import { IconRegistry, ApplicationProvider } from "@ui-kitten/components"
+import { light, mapping } from "@eva-design/eva"
+import { RootSiblingParent } from "react-native-root-siblings"
+import { Host as PortalProvider } from "react-native-portalize"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useInitialRootStore } from "./models"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
-import { customFontsToLoad } from "./theme"
 import Config from "./config"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { ViewStyle } from "react-native"
+import { appTheme, mappingTheme } from "./theme"
+import AppIconsPack from "./components/IconsPack/AppIconsPack"
+import * as ExpoIconsPack from "./components/IconsPack/ExpoIconsPack"
+import { FontAssets } from "./constants/assets"
+import { Loading, loadingRef } from "./components/Loading"
+
+moment.updateLocale("vi", {
+  calendar: {
+    sameDay: "[Hôm nay] HH:mm",
+    nextDay: "[Hôm mai] HH:mm",
+    nextWeek: "L HH:mm",
+    lastDay: "[Hôm qua] HH:mm",
+    lastWeek: "L HH:mm",
+    sameElse: "L HH:mm",
+  },
+})
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -39,17 +62,6 @@ const config = {
   screens: {
     Login: {
       path: "",
-    },
-    Welcome: "welcome",
-    Demo: {
-      screens: {
-        DemoShowroom: {
-          path: "showroom/:queryIndex?/:itemIndex?",
-        },
-        DemoDebug: "debug",
-        DemoPodcastList: "podcast",
-        DemoCommunity: "community",
-      },
     },
   },
 }
@@ -69,7 +81,7 @@ function App(props: AppProps) {
     isRestored: isNavigationStateRestored,
   } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
 
-  const [areFontsLoaded] = useFonts(customFontsToLoad)
+  const [areFontsLoaded] = useFonts(FontAssets)
 
   const { rehydrated } = useInitialRootStore(() => {
     // This runs after the root store has been initialized and rehydrated.
@@ -98,12 +110,26 @@ function App(props: AppProps) {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ErrorBoundary catchErrors={Config.catchErrors}>
-        <GestureHandlerRootView style={$container}>
-          <AppNavigator
-            linking={linking}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
+        <GestureHandlerRootView style={tw.flex1}>
+          <RootSiblingParent>
+            <IconRegistry icons={[EvaIconsPack, AppIconsPack, ...Object.values(ExpoIconsPack)]} />
+            <ApplicationProvider
+              theme={{ ...light, ...appTheme }}
+              mapping={mapping}
+              // @ts-ignore
+              customMapping={mappingTheme}
+            >
+              <PortalProvider>
+                <StatusBar style="dark" />
+                <AppNavigator
+                  linking={linking}
+                  initialState={initialNavigationState}
+                  onStateChange={onNavigationStateChange}
+                />
+                <Loading ref={loadingRef} />
+              </PortalProvider>
+            </ApplicationProvider>
+          </RootSiblingParent>
         </GestureHandlerRootView>
       </ErrorBoundary>
     </SafeAreaProvider>
@@ -111,7 +137,3 @@ function App(props: AppProps) {
 }
 
 export default App
-
-const $container: ViewStyle = {
-  flex: 1,
-}

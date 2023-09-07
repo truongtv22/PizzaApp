@@ -1,0 +1,30 @@
+diff --git a/node_modules/@ui-kitten/components/devsupport/typings.d.ts b/node_modules/@ui-kitten/components/devsupport/typings.d.ts
+index 2e3be0f..a5b4edc 100644
+--- a/node_modules/@ui-kitten/components/devsupport/typings.d.ts
++++ b/node_modules/@ui-kitten/components/devsupport/typings.d.ts
+@@ -1,7 +1,7 @@
+ import { ReactElement } from 'react';
+ export type ChildrenProp<Element extends ReactElement = ReactElement> = Element | Element[];
+ export type ChildrenWithProps<Props> = ChildrenProp<ReactElement<Props>>;
+-export type LiteralUnion<T extends U, U = string> = T | (U & {});
++export type LiteralUnion<T extends U, U = string> = T | (U & Record<never, never>);
+ export type EvaStatus = LiteralUnion<'basic' | 'primary' | 'success' | 'info' | 'warning' | 'danger' | 'control'>;
+ export type EvaSize = LiteralUnion<'tiny' | 'small' | 'medium' | 'large' | 'giant'>;
+ export type EvaInputSize = LiteralUnion<'small' | 'medium' | 'large'>;
+diff --git a/node_modules/@ui-kitten/components/ui/autocomplete/autocomplete.component.js b/node_modules/@ui-kitten/components/ui/autocomplete/autocomplete.component.js
+index 8663215..cde52a2 100644
+--- a/node_modules/@ui-kitten/components/ui/autocomplete/autocomplete.component.js
++++ b/node_modules/@ui-kitten/components/ui/autocomplete/autocomplete.component.js
+@@ -159,10 +159,10 @@ class Autocomplete extends react_1.default.Component {
+     render() {
+         const { placement, children, testID, ...inputProps } = this.props;
+         return (<popover_component_1.Popover style={styles.popover} placement={placement} testID={testID} visible={this.state.listVisible} fullWidth={true} anchor={() => this.renderAnchorInputElement(inputProps)} onBackdropPress={this.onBackdropPress}>
+-        <>
++        <react_native_1.View>
+           {this.renderInputElement(inputProps)}
+           <list_component_1.List style={styles.list} keyboardShouldPersistTaps='always' data={this.data} bounces={false} renderItem={this.renderItem}/>
+-        </>
++        </react_native_1.View>
+       </popover_component_1.Popover>);
+     }
+ }

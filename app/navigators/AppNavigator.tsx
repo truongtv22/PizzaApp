@@ -4,19 +4,17 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer,
-} from "@react-navigation/native"
-import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import React from "react"
-import { useColorScheme } from "react-native"
+import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native"
+import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
+import Config from "app/config"
+import { api } from "app/services/api"
+import { useStores } from "app/models"
 import * as Screens from "app/screens"
-import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
-import { colors } from "app/theme"
+import { AppRoute } from "./appRoute"
+import { TabNavigator, TabParamList } from "./TabNavigator"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -32,10 +30,78 @@ import { colors } from "app/theme"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Welcome: undefined
-  // 🔥 Your screens go here
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  [AppRoute.TAB]: NavigatorScreenParams<TabParamList>
+
+  // Main routes
+  [AppRoute.HOME]: undefined
+  [AppRoute.NEWS_CATEGORY]: undefined
+  [AppRoute.LATEST_NEWS]: undefined
+
+  // Auth routes
+  [AppRoute.LOGIN]: undefined
+  [AppRoute.LOGIN_SMS]: undefined
+  [AppRoute.VERIFY_SMS]: undefined
+  [AppRoute.REGISTER]: undefined
+  [AppRoute.FORGET_PASS]: undefined
+
+  // Protected routes
+  [AppRoute.PROFILE]: undefined
+  [AppRoute.PROFILE_EDIT]: undefined
 }
+
+type ScreenRoute = {
+  name: keyof AppStackParamList
+  screen: React.ComponentType<{}>
+}
+
+const mainRoutes: ScreenRoute[] = [
+  {
+    name: AppRoute.HOME,
+    screen: Screens.HomeScreen,
+  },
+  {
+    name: AppRoute.NEWS_CATEGORY,
+    screen: Screens.NewsCategoryScreen,
+  },
+  {
+    name: AppRoute.LATEST_NEWS,
+    screen: Screens.LatestNewsScreen,
+  },
+]
+
+const authRoutes: ScreenRoute[] = [
+  {
+    name: AppRoute.LOGIN,
+    screen: Screens.LoginScreen,
+  },
+  {
+    name: AppRoute.LOGIN_SMS,
+    screen: Screens.LoginSmsScreen,
+  },
+  {
+    name: AppRoute.VERIFY_SMS,
+    screen: Screens.VerifySmsScreen,
+  },
+  {
+    name: AppRoute.REGISTER,
+    screen: Screens.RegisterScreen,
+  },
+  {
+    name: AppRoute.FORGET_PASS,
+    screen: Screens.ForgetPassScreen,
+  },
+]
+
+const protectedRoutes: ScreenRoute[] = [
+  {
+    name: AppRoute.PROFILE,
+    screen: Screens.ProfileScreen,
+  },
+  {
+    name: AppRoute.PROFILE_EDIT,
+    screen: Screens.ProfileEditScreen,
+  },
+]
 
 /**
  * This is a list of all the route names that will exit the app if the back button
@@ -52,13 +118,42 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
+  const {
+    authStore: { token, isAuthenticated },
+    userStore: { getUserInfo },
+  } = useStores()
+
+  useEffect(() => {
+    api.setToken(token)
+  }, [token])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getUserInfo()
+    }
+  }, [isAuthenticated])
+
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
-    >
-          <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} />
-      {/** 🔥 Your screens go here */}
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={AppRoute.TAB} component={TabNavigator} />
+      <Stack.Group>
+        {mainRoutes.map((route) => (
+          <Stack.Screen key={route.name} name={route.name} component={route.screen} />
+        ))}
+      </Stack.Group>
+      {isAuthenticated ? (
+        <Stack.Group>
+          {protectedRoutes.map((route) => (
+            <Stack.Screen key={route.name} name={route.name} component={route.screen} />
+          ))}
+        </Stack.Group>
+      ) : (
+        <Stack.Group>
+          {authRoutes.map((route) => (
+            <Stack.Screen key={route.name} name={route.name} component={route.screen} />
+          ))}
+        </Stack.Group>
+      )}
     </Stack.Navigator>
   )
 })
@@ -67,16 +162,10 @@ export interface NavigationProps
   extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
-  const colorScheme = useColorScheme()
-
   useBackButtonHandler((routeName) => exitRoutes.includes(routeName))
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-      {...props}
-    >
+    <NavigationContainer ref={navigationRef} {...props}>
       <AppStack />
     </NavigationContainer>
   )
